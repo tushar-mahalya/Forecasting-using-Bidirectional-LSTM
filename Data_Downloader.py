@@ -96,6 +96,8 @@ def normalize_feature(stock_df: pd.DataFrame, col: str):
 
 
 def data_accumilator(src_location: str, stocks_lst: list):
+    preprocessed_data_path = {}
+
     parent_dir = src_location
     root_dir = os.path.join(parent_dir, 'Stocks Data')
 
@@ -142,8 +144,14 @@ def data_accumilator(src_location: str, stocks_lst: list):
             shutil.move(normalized_file_path, folder_path)
             shutil.move(folder_path, root_dir)
 
+            path = os.path.join(parent_dir, 'Stocks Data', ticker, f'Normalized_{ticker}.csv')
+            preprocessed_data_path[ticker] = path
+
         print("Directory named \"Stocks Data\" with required data is downloaded successfully at \"{}\"".format(
             src_location))
+
+        return preprocessed_data_path
+
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ def simple_model(X, y, learn_rate):
     model.add(Dense(y.shape[1], activation='tanh'))
 
     # compile the model
-    optimizer = RMSprop(lr=learn_rate)
+    optimizer = RMSprop(learning_rate=learn_rate)
     model.compile(loss='mean_squared_error', optimizer=optimizer)
     return model
 
@@ -20,7 +20,7 @@ def dynamic_model(X, y, learn_rate):
     model.add(Dense(y.shape[1], activation='tanh'))
 
     # compile the model
-    optimizer = RMSprop(lr=learn_rate)
+    optimizer = RMSprop(learning_rate=learn_rate)
     model.compile(loss='mean_squared_error', optimizer=optimizer)
     return model
 
@@ -32,7 +32,7 @@ def bidirectional_model(X, y, learn_rate):
     model.add(Dense(y.shape[1], activation='tanh'))
 
     # compile the model
-    optimizer = RMSprop(lr=learn_rate)
+    optimizer = RMSprop(learning_rate=learn_rate)
     model.compile(loss='mean_squared_error', optimizer=optimizer)
     return model
 
@@ -44,7 +44,7 @@ def stacked_model(X, y, learn_rate):
     model.add(Dense(y.shape[1], activation='tanh'))
 
     # compile the model
-    optimizer = RMSprop(lr=learn_rate)
+    optimizer = RMSprop(learning_rate=learn_rate)
     model.compile(loss='mean_squared_error', optimizer=optimizer)
     return model
 
