@@ -2,18 +2,26 @@ import numpy as np
 import pandas as pd
 
 
-def predictor_response_split(df: pd.DataFrame, window_size: int, sequence: str = 'multi'):
-    if sequence == 'uni':
-        numpy_df = df.iloc[:, 0].to_numpy()
-    else:
-        numpy_df = df.to_numpy()
+def predictor_response_split(df: pd.DataFrame, window_size: int, sequence: str):
     X = []
     y = []
-    for i in range(len(numpy_df) - window_size):
-        row = [r for r in numpy_df[i:i + window_size]]
-        X.append(row)
-        label = [numpy_df[i + window_size][0]]
-        y.append(label)
+
+    if sequence == 'uni':
+        numpy_df = df['normal_close'].to_numpy()
+
+        for i in range(len(numpy_df) - window_size):
+            row = [[a] for a in numpy_df[i:i + window_size]]
+            X.append(row)
+            label = numpy_df[i + window_size]
+            y.append(label)
+    else:
+        numpy_df = df.to_numpy()
+
+        for i in range(len(numpy_df) - window_size):
+            row = [r for r in numpy_df[i:i + window_size]]
+            X.append(row)
+            label = [numpy_df[i + window_size][0]]
+            y.append(label)
 
     return np.array(X), np.array(y)
 
