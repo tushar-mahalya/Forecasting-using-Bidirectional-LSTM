@@ -151,11 +151,3 @@ def data_accumilator(src_location: str, stocks_lst: list):
             src_location))
 
         return preprocessed_data_path
-
-
-
-if __name__ == '__main__':
-    # print_hi('PyCharm')
-    nifty = pd.read_csv('nifty50.csv')
-    nifty_tickers = nifty['Symbol'].sample(1)
-    data_accumilator('/home/tushar_sharma/PycharmProjects/data_downloader', nifty_tickers)
