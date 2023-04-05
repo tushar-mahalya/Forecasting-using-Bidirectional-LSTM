@@ -1,3 +1,5 @@
+import os
+import json
 import pandas as pd
 from collections import OrderedDict
 from termcolor import colored as color
@@ -6,9 +8,17 @@ from Data_Initializer import train_test_data
 def test_models(data_dict, epochs: int, models: dict, window_sizes: list):
     
     #test result data
+    best_params = OrderedDict()
     parameter_dict = OrderedDict()
     sequences = ['Simple', 'Multi']
     for ticker in data_dict.keys():
+        
+        lowest_train_error = 1.0
+        lowest_test_error = 1.0
+        best_model = str()
+        best_model_param_count = int()
+        best_window_size = int()
+        best_seq = str()
         
         seq_type = {}
         print(color(f'\n================================ NSE : {ticker} ================================', 'red', attrs = ["bold"]))
@@ -19,7 +29,7 @@ def test_models(data_dict, epochs: int, models: dict, window_sizes: list):
             for window_size in window_sizes:
 
                 model_name = {}
-                print(color(f"\nWindow size: {window_size}", 'blue'))
+                print(color(f"\nWindow size : {window_size}", 'blue'))
                 print(color('----------------', 'yellow'))
                 for model_item in models:
 
@@ -41,19 +51,44 @@ def test_models(data_dict, epochs: int, models: dict, window_sizes: list):
                                                  'Training Error' : float("{0:.4f}".format(training_error)),
                                                  'Testing Error' : float("{0:.4f}".format( testing_error))
                                                 }
-
+                    if testing_error < lowest_test_error:
+                        lowest_train_error = training_error
+                        lowest_test_error = testing_error
+                        best_model = model_item[0]
+                        best_model_param_count = model.count_params()
+                        best_window_size = window_size
+                        best_seq = seq
+                        
                 win_size[f'Window_Size_{window_size}'] = model_name
                 
             seq_type[f'{seq} Sequence'] = win_size
         
         parameter_dict[ticker] = seq_type
+        best_params[ticker] = {
+                               'Best Model' : best_model,
+                               'Window Size' : best_window_size,
+                               'Sequence' : best_seq,
+                               'Training Error' : lowest_train_error,
+                               'Testing Error' : lowest_test_error,
+                               'Learning Rate' : 0.001,
+                               'Parameters Count' : best_model_param_count
+                              }
         
-    # Exporting performance of different models in .json format
-    with open("Performance_Parameters.json", "w") as f:
-        json.dump(parameter_dict, f)
-        f.close()
+    # Exporting performance of different models and best parameters dict in .json format
+    cwd = os.getcwd()
+    if os.path.isdir(os.path.join(cwd, 'Model Performance')):
+        print("Required data/directory is already present in current working directory.")
+    
+    else:
+        os.mkdir('Model Performance')
+        with open("Model Performance/Performance_Params.json", "w") as f:
+            json.dump(parameter_dict, f)
+            f.close()
+        with open("Model Performance/Best_Model_Params.json", "w") as f:
+            json.dump(best_params, f)
+            f.close()
    
             
-    print(color('\nSuccesfully Evaluated different models and saved the performance metrics in \'Performance Parameters\' directory.', 'magenta'))
+    print(color('\nSuccesfully Evaluated different models and saved all logs and best model performance metrics in \'Model Performance\' directory.', 'magenta'))
         
-    return parameter_dict
+    return parameter_dict, best_params
