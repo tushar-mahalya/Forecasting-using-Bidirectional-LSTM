@@ -41,7 +41,7 @@ def test_models(data_dict, epochs: int, models: dict, window_sizes: list):
 
                     data = pd.read_csv(data_dict[ticker])
                     X_train,y_train,X_test,y_test = train_test_data(data, split_size = 0.2, window_size = window_size, seq = seq)
-                    model = models[model_type](X_train,y_train,0.001, model_name = f'{ticker}_Model')
+                    model = models[model_type](X_train,y_train,0.001, model_name = f'{ticker.replace("&", "and")}_Model')
 
                     # fitting model
                     model.fit(X_train, y_train, epochs=epochs, batch_size=50, verbose=0)
