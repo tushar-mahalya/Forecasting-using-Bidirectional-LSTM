@@ -1,13 +1,9 @@
-# Scientific Calculation
-import pandas as pd
-import numpy as np
-
-# Financial Data
-import yfinance as yf
-
-# File Management
 import os
 import shutil
+import yfinance as yf
+
+from src.components.features import money_flow_index, log_return
+from src.utils import normalize_feature
 
 
 def stock_data(ticker: str):
@@ -23,7 +19,7 @@ def data_accumilator(src_location: str, stocks_lst: list):
     preprocessed_data_path = {}
 
     parent_dir = src_location
-    root_dir = os.path.join(parent_dir, 'Stocks Data')
+    root_dir = os.path.join(parent_dir, 'data')
 
     if os.path.exists(root_dir):
         print("Data is already present in the source location.")
